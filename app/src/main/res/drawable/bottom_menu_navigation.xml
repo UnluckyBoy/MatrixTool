@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/action_mainIcon"
+        android:checked="true"
+        android:icon="@drawable/main"
+        android:title="@string/mainIcon" />
+    <item
+        android:id="@+id/action_moreIcon"
+        android:icon="@drawable/more"
+        android:title="@string/moreIcon" />
+    <item
+        android:id="@+id/action_userIcon"
+        android:icon="@drawable/user"
+        android:title="@string/userIcon" />
+</menu>

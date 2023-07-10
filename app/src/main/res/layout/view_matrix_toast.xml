@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/toast_layout_root"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/lay_back_matrix_toast"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:padding="16dp">
+
+    <ImageView
+        android:id="@+id/toast_icon"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:src="@drawable/head_icon"
+        android:gravity="center"/>
+    <ImageView
+        android:id="@+id/toast_null"
+        android:layout_width="8dp"
+        android:layout_height="20dp"
+        android:gravity="center"/>
+
+    <TextView
+        android:id="@+id/toast_text"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:text="MatrixToast Message"
+        android:textColor="@color/colorBlack"
+        android:gravity="center"/>
+
+</LinearLayout>

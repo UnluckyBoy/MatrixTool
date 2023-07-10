@@ -1,0 +1,37 @@
+<resources>
+    <string name="app_name">万能工具</string>
+    <string name="mainIcon">主页</string>
+    <string name="moreIcon">工具</string>
+    <string name="userIcon">其他</string>
+    <string name="no_function">功能尚未实现,敬请期待!!!</string>
+    <string name="Confirm">确定</string>
+    <string name="Cancel">取消</string>
+    <string name="other_login">第三方登录</string>
+    <string name="SystemTitle">系统提示</string>
+    <string name="saveTitle">是否保存?</string>
+    <string name="loginTitle">尚未登录,是否登录?\n取消,则无法使用相关功能,请谨慎!!!</string>
+    <string name="cancelLogin">是否放弃登录?</string>
+    <string name="cancelRegister">是否放弃注册?</string>
+    <string name="accountIsRegis">此号已注册！</string>
+    <string name="pwdConfirmError">前后输入密码错误,请检查！</string>
+    <string name="visitor_NumAdd">是否观看广告获取次数?</string>
+    <string name="loading">请稍后。。。</string>
+    <string name="editNull">输入内容为空!请检查!!!</string>
+    <string name="NullPermission">已没有使用次数,请知悉!!!</string>
+    <string name="ShowAdvertise">已没有使用权限,\n是否观看广告获取次数?</string>
+    <string name="user_info">账户信息</string>
+    <string name="help">帮助</string>
+    <string name="about">应用相关</string>
+
+    <!--用户-->
+    <string name="info_id">uId</string>
+    <string name="info_head">uHead</string>
+    <string name="info_name">uName</string>
+    <string name="info_password">uPassword</string>
+    <string name="info_sex">uSex</string>
+    <string name="info_account">uAccount</string>
+    <string name="info_phone">uPhone</string>
+    <string name="info_email">uEmail</string>
+    <string name="info_gptNum">uGptNum</string>
+    <string name="info_level">uLevel</string>
+</resources>

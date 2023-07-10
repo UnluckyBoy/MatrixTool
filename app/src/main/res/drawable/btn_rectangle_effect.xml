@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!--正常效果-->
+    <item
+        android:state_pressed="false">
+        <shape>
+            <corners android:radius="90dp"/>
+            <solid android:color="@color/transparent"/>
+            <stroke android:width="2dp" android:color="@color/md_green_200"/>
+        </shape>
+    </item>
+
+    <!--按压效果-->
+    <item
+        android:state_pressed="true">
+        <shape>
+            <corners android:radius="90dp"/>
+            <solid android:color="@color/transparent"/>
+            <stroke android:width="2dp" android:color="@color/gray"/>
+        </shape>
+    </item>
+</selector>

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <RelativeLayout
+        android:id="@+id/rl_title_base"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:background="@color/md_teal_200">
+
+        <LinearLayout
+            android:id="@+id/ll_back_base"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@drawable/back"
+                android:clickable="false"
+                android:minWidth="0dp"
+                android:minHeight="0dp" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_title_base"
+            android:textColor="@color/md_yellow_700"
+            android:textSize="14dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:singleLine="true"/>
+
+        <LinearLayout
+            android:id="@+id/ll_right_base"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/selector"
+            android:gravity="center_vertical"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <Button
+                android:id="@+id/btn_right_base"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@drawable/scan_icon"
+                android:clickable="false"
+                android:minWidth="0dp"
+                android:minHeight="0dp" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <FrameLayout
+        android:id="@+id/fl_base_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="2dp">
+    </FrameLayout>
+
+</LinearLayout>
