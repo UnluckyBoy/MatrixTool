@@ -115,42 +115,6 @@ public class ImageTool{
     }
 
     /**
-     * 压缩保存
-     * @param bitmap
-     * @param path
-     * @param mContext
-     * @param fileName
-     */
-    public static void compress_SaveBitmap(Bitmap bitmap, String path, Context mContext,String fileName) {
-        String savePath;
-        File filePic;
-        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-            savePath = path;
-        } else {
-            //Log.e("tag", "saveBitmap failure : sdcard not mounted");
-            return;
-        }
-        try {
-            filePic = new File(savePath,fileName);
-            if (!filePic.exists()) {
-                filePic.getParentFile().mkdirs();
-                filePic.createNewFile();
-            }
-            FileOutputStream fos = new FileOutputStream(filePic+".jpg");
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 20, fos);
-            fos.flush();
-            fos.close();
-            //Toast.makeText(mContext, "保存成功!!!", Toast.LENGTH_SHORT).show();
-        } catch (IOException e) {
-            Log.e("tag", "saveBitmap: " + e.getMessage());
-            MatrixToast.showToast(mContext, "保存失败!!!",Toast.LENGTH_SHORT);
-            return;
-        }
-        Log.i("tag", "saveBitmap success: " + filePic.getAbsolutePath());
-        MatrixToast.showToast(mContext, "保存成功!!!", Toast.LENGTH_SHORT);
-    }
-
-    /**
      * 通过path将图片转base64编码
      * @param path
      * @return
@@ -297,31 +261,47 @@ public class ImageTool{
         return null;
     }
 
-    /***
-     * 自定义图片压缩：质量压缩方法
+    /**
+     *
+     * 自定义质量压缩并保存
      * @param beforeBitmap 压缩前图片
      * @param tarSize 目标大小,单位为kb
      * @return 压缩后图片
+     * @param path 保存路径
+     * @param name 文件名
+     * @return
+     * @throws IOException
      */
-    public static Bitmap customCompressImage(Bitmap beforeBitmap,long tarSize) {
+    public static String customCompressImage(Bitmap beforeBitmap,long tarSize,String path,String name) throws IOException {
         // 可以捕获内存缓冲区的数据,转换成字节数组
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        if (beforeBitmap != null) {
-            // 第一个参数:图片压缩的格式;第二个参数:压缩的比率;第三个参数:压缩的数据存放到bos中
-            beforeBitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
-            // 循环判断压缩后的图片大小是否满足要求,这里限制8192kb,即8M,若不满足则继续压缩,每次递减10%压缩
-            int options = 90;
-            while (bos.toByteArray().length / 1024 > tarSize) {
-                bos.reset();//置空bos
-                beforeBitmap.compress(Bitmap.CompressFormat.JPEG, options, bos);//压缩options%,把压缩后的数据存放到bos中
+        //压缩比重，图片存储在磁盘上的大小会根据这个值变化,值越小存储在磁盘的图片文件越小,取值
+        //区间为0-100,小于0时会抛异常
+        int options = 100;
+        beforeBitmap.compress(Bitmap.CompressFormat.JPEG, options, bos);
+        // Compress by loop
+        while (bos.toByteArray().length/1024 > tarSize)
+        {
+            bos.reset();
+            if (options > 10) {
                 options -= 10;
+                beforeBitmap.compress(Bitmap.CompressFormat.JPEG, options, bos);
+            } else {
+                options = 1;
+                beforeBitmap.compress(Bitmap.CompressFormat.JPEG,options, bos);
+                break;
             }
-            //从bos中将数据读出来转换成图片
-            ByteArrayInputStream bis = new ByteArrayInputStream(bos.toByteArray());
-            Bitmap afterBitmap = BitmapFactory.decodeStream(bis);
-            return afterBitmap;
         }
-        return null;
+        File file = new File(path,name+".jpg");
+        if (!file.exists()) {
+            file.getParentFile().mkdirs();
+            file.createNewFile();
+        }
+        FileOutputStream fos = new FileOutputStream(file);
+        fos.write(bos.toByteArray());
+        fos.flush();
+        fos.close();
+        return file.getAbsolutePath();
     }
 
     /**

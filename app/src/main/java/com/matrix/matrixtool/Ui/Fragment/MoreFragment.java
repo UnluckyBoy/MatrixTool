@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,6 +35,8 @@ import com.matrix.matrixtool.UtilTools.ImageTool;
 import com.matrix.matrixtool.UtilTools.StringUtil;
 import com.matrix.matrixtool.UtilTools.TimeTool;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class MoreFragment extends Fragment {
@@ -155,7 +158,7 @@ public class MoreFragment extends Fragment {
                                     final String localPicturePath = result.get(0).getRealPath();
                                     final long fileSize = result.get(0).getSize();//文件大小
 
-                                    Show_lay_compress_image_root(name,localPicturePath,fileSize);
+                                    Show_lay_compress_image_root(localPicturePath);
                                 }
                                 @Override
                                 public void onCancel() {
@@ -199,7 +202,7 @@ public class MoreFragment extends Fragment {
         }
     }
 
-    private void Show_lay_compress_image_root(String name,String path,long size){
+    private void Show_lay_compress_image_root(String path){
         lay_compress_image_root=view.findViewById(R.id.lay_compress_image_root);
         lay_compress_trans=view.findViewById(R.id.lay_compress_trans);
         compress=view.findViewById(R.id.compress);
@@ -219,14 +222,7 @@ public class MoreFragment extends Fragment {
             compress_btn=view.findViewById(R.id.compress_btn);
 
             original_image.setImageURI(Uri.parse(path));
-
-            original_image_name.setText(name);
-            String targetChar = "0";
-            int startIndex = path.indexOf(targetChar);
-            int lastIndex = path.lastIndexOf("/");
-            original_image_path.setText(path.substring(startIndex+2,lastIndex));
-            double d_size =(size/1000d);
-            original_image_size.setText(String.format("%.2f",d_size)+"kb");
+            bindImageInfo(original_image_name,original_image_path,original_image_size,path,"original");
 
             compress_btn.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -235,24 +231,48 @@ public class MoreFragment extends Fragment {
                         MatrixToast.showToast(view.getContext(),view.getContext().getString(R.string.editNull),0);
                     }else{
                         Bitmap temp=ImageTool.imagePath2Bitmap(path);
-                        Bitmap imageBit=ImageTool.customCompressImage(temp,Integer.parseInt(edit_size.getText().toString()));
-                        MatrixToast.showToast(view.getContext(),"文件大小:",0);
-                        if(imageBit!=null){
-                            compress.setVisibility(View.VISIBLE);
-                            ImageView compress_image;
-                            TextView compress_image_name,compress_image_path,compress_image_size;
-                            compress_image=view.findViewById(R.id.compress_image);
-                            String name=TimeTool.GetSystemTime();
-                            compress_image_name=view.findViewById(R.id.compress_image_name);
-                            compress_image_path=view.findViewById(R.id.compress_image_path);
-                            compress_image_size=view.findViewById(R.id.compress_image_size);
+                        try {
+                            String image_path=ImageTool.customCompressImage(temp,Integer.parseInt(edit_size.getText().toString()),file_path,TimeTool.GetSystemTime());
+                            //Log.d("图片", "路径:"+image);
+                            if(!(StringUtil.isEmptyOrBlank(image_path))){
+                                MatrixToast.showToast(view.getContext(), "保存成功!!!", Toast.LENGTH_SHORT);
+                                compress.setVisibility(View.VISIBLE);
 
-                            compress_image.setImageBitmap(imageBit);
-                            ImageTool.compress_SaveBitmap(imageBit,file_path,view.getContext(), TimeTool.GetSystemTime());
+                                ImageView compress_image;
+                                TextView compress_image_name,compress_image_path,compress_image_size;
+                                compress_image=view.findViewById(R.id.compress_image);
+                                compress_image_name=view.findViewById(R.id.compress_image_name);
+                                compress_image_path=view.findViewById(R.id.compress_image_path);
+                                compress_image_size=view.findViewById(R.id.compress_image_size);
+
+                                compress_image.setImageURI(Uri.parse(image_path));
+                                bindImageInfo(compress_image_name,compress_image_path,compress_image_size,image_path,"compress");
+                            }
+                        } catch (IOException e) {
+                            e.printStackTrace();
                         }
                     }
                 }
             });
+        }
+    }
+
+    private void bindImageInfo(TextView name,TextView path,TextView size,String image_path,String image_type){
+        File imageTemp = new File(image_path);
+        name.setText(imageTemp.getName());
+        double image_size =(imageTemp.length()/1000d);
+        size.setText(String.format("%.2f",image_size)+"kb");
+        switch (image_type){
+            case "original":
+                String targetChar = "0";
+                int startIndex = image_path.indexOf(targetChar);
+                int lastIndex = image_path.lastIndexOf("/");
+                path.setText(image_path.substring(startIndex+2,lastIndex));
+                break;
+            case "compress":
+                int compress_lastIndex = image_path.lastIndexOf("/");
+                path.setText(image_path.substring(1,compress_lastIndex));
+                break;
         }
     }
 }
