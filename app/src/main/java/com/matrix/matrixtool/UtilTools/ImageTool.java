@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.media.ExifInterface;
 import android.media.ThumbnailUtils;
 import android.os.Environment;
 import android.os.Handler;
@@ -267,19 +268,19 @@ public class ImageTool{
      * @param beforeBitmap 压缩前图片
      * @param tarSize 目标大小,单位为kb
      * @return 压缩后图片
-     * @param path 保存路径
+     * @param save_path 保存路径
      * @param name 文件名
      * @return
      * @throws IOException
      */
-    public static String customCompressImage(Bitmap beforeBitmap,long tarSize,String path,String name) throws IOException {
+    public static String customCompressImage(Bitmap beforeBitmap,long tarSize,String save_path,String name) throws IOException {
         // 可以捕获内存缓冲区的数据,转换成字节数组
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         //压缩比重，图片存储在磁盘上的大小会根据这个值变化,值越小存储在磁盘的图片文件越小,取值
         //区间为0-100,小于0时会抛异常
         int options = 100;
         beforeBitmap.compress(Bitmap.CompressFormat.JPEG, options, bos);
-        // Compress by loop
+        //循环压缩
         while (bos.toByteArray().length/1024 > tarSize)
         {
             bos.reset();
@@ -292,7 +293,7 @@ public class ImageTool{
                 break;
             }
         }
-        File file = new File(path,name+".jpg");
+        File file = new File(save_path,name+".jpg");
         if (!file.exists()) {
             file.getParentFile().mkdirs();
             file.createNewFile();
@@ -336,12 +337,9 @@ public class ImageTool{
             scaleWidth = ((float) newWidth) / beforeHeight;
             scaleHeight = ((float) newHeight) / beforeWidth;
         }
-
-        // 矩阵对象
-        Matrix matrix = new Matrix();
-        // 缩放图片动作 缩放比例
-        matrix.postScale(scaleWidth, scaleHeight);
-        // 创建一个新的Bitmap 从原始图像剪切图像
+        Matrix matrix = new Matrix();//矩阵对象
+        matrix.postScale(scaleWidth, scaleHeight);//缩放图片 缩放比例
+        // 创建Bitmap 从原始图像剪切图像
         Bitmap afterBitmap = Bitmap.createBitmap(beforeBitmap, 0, 0,(int) beforeWidth, (int) beforeHeight, matrix, true);
         return afterBitmap;
     }
@@ -370,8 +368,7 @@ public class ImageTool{
         Log.d("BitmapUtils", "before[" + beforeWidth + ", " + beforeHeight + "] max[" + maxWidth
                 + ", " + maxHeight + "] scale:" + scale);
 
-        // 矩阵对象
-        Matrix matrix = new Matrix();
+        Matrix matrix = new Matrix();// 矩阵对象
         // 缩放图片动作 缩放比例
         matrix.postScale(scale, scale);
         // 创建一个新的Bitmap 从原始图像剪切图像

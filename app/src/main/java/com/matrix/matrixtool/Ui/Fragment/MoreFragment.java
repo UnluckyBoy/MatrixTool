@@ -227,26 +227,26 @@ public class MoreFragment extends Fragment {
             compress_btn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(StringUtil.isEmptyOrBlank(edit_size.getText().toString())){
-                        MatrixToast.showToast(view.getContext(),view.getContext().getString(R.string.editNull),0);
-                    }else{
-                        Bitmap temp=ImageTool.imagePath2Bitmap(path);
+                    if (StringUtil.isEmptyOrBlank(edit_size.getText().toString())) {
+                        MatrixToast.showToast(view.getContext(), view.getContext().getString(R.string.editNull), 0);
+                    } else {
+                        Bitmap temp = ImageTool.imagePath2Bitmap(path);
                         try {
-                            String image_path=ImageTool.customCompressImage(temp,Integer.parseInt(edit_size.getText().toString()),file_path,TimeTool.GetSystemTime());
+                            String image_path = ImageTool.customCompressImage(temp, Integer.parseInt(edit_size.getText().toString()), file_path, TimeTool.GetSystemTime());
                             //Log.d("图片", "路径:"+image);
-                            if(!(StringUtil.isEmptyOrBlank(image_path))){
+                            if (!(StringUtil.isEmptyOrBlank(image_path))) {
                                 MatrixToast.showToast(view.getContext(), "保存成功!!!", Toast.LENGTH_SHORT);
                                 compress.setVisibility(View.VISIBLE);
 
                                 ImageView compress_image;
-                                TextView compress_image_name,compress_image_path,compress_image_size;
-                                compress_image=view.findViewById(R.id.compress_image);
-                                compress_image_name=view.findViewById(R.id.compress_image_name);
-                                compress_image_path=view.findViewById(R.id.compress_image_path);
-                                compress_image_size=view.findViewById(R.id.compress_image_size);
+                                TextView compress_image_name, compress_image_path, compress_image_size;
+                                compress_image = view.findViewById(R.id.compress_image);
+                                compress_image_name = view.findViewById(R.id.compress_image_name);
+                                compress_image_path = view.findViewById(R.id.compress_image_path);
+                                compress_image_size = view.findViewById(R.id.compress_image_size);
 
                                 compress_image.setImageURI(Uri.parse(image_path));
-                                bindImageInfo(compress_image_name,compress_image_path,compress_image_size,image_path,"compress");
+                                bindImageInfo(compress_image_name, compress_image_path, compress_image_size, image_path, "compress");
                             }
                         } catch (IOException e) {
                             e.printStackTrace();
