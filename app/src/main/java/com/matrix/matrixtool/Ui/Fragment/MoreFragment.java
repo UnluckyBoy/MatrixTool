@@ -69,7 +69,6 @@ public class MoreFragment extends Fragment {
             }
         }else{
             view = inflater.inflate(R.layout.fragment_more, container, false);
-
             Bundle bundle = getArguments();
         }
 
@@ -230,9 +229,9 @@ public class MoreFragment extends Fragment {
                     if (StringUtil.isEmptyOrBlank(edit_size.getText().toString())) {
                         MatrixToast.showToast(view.getContext(), view.getContext().getString(R.string.editNull), 0);
                     } else {
-                        Bitmap temp = ImageTool.imagePath2Bitmap(path);
+                        //Bitmap temp = ImageTool.imagePath2Bitmap(path);
                         try {
-                            String image_path = ImageTool.customCompressImage(temp, Integer.parseInt(edit_size.getText().toString()), file_path, TimeTool.GetSystemTime());
+                            String image_path = ImageTool.customCompressImage(path, Integer.parseInt(edit_size.getText().toString()), file_path, TimeTool.GetSystemTime());
                             //Log.d("图片", "路径:"+image);
                             if (!(StringUtil.isEmptyOrBlank(image_path))) {
                                 MatrixToast.showToast(view.getContext(), "保存成功!!!", Toast.LENGTH_SHORT);

@@ -265,7 +265,7 @@ public class ImageTool{
     /**
      *
      * 自定义质量压缩并保存
-     * @param beforeBitmap 压缩前图片
+     * @param beforeBitmap 压缩前图片路径
      * @param tarSize 目标大小,单位为kb
      * @return 压缩后图片
      * @param save_path 保存路径
@@ -273,23 +273,44 @@ public class ImageTool{
      * @return
      * @throws IOException
      */
-    public static String customCompressImage(Bitmap beforeBitmap,long tarSize,String save_path,String name) throws IOException {
+    public static String customCompressImage(String beforeBitmap,long tarSize,String save_path,String name) throws IOException {
+        // 加载图像文件为 Bitmap 对象
+        Bitmap bitmap = BitmapFactory.decodeFile(beforeBitmap);
+        // 检查图像的 Exif 数据
+        ExifInterface exifInterface = new ExifInterface(beforeBitmap);
+        int orientation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED);
+        // 根据方向信息进行旋转操作
+        Matrix matrix = new Matrix();
+        switch (orientation) {
+            case ExifInterface.ORIENTATION_ROTATE_90:
+                matrix.postRotate(90);
+                break;
+            case ExifInterface.ORIENTATION_ROTATE_180:
+                matrix.postRotate(180);
+                break;
+            case ExifInterface.ORIENTATION_ROTATE_270:
+                matrix.postRotate(270);
+                break;
+        }
+        // 应用旋转矩阵
+        Bitmap rotatedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+
         // 可以捕获内存缓冲区的数据,转换成字节数组
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         //压缩比重，图片存储在磁盘上的大小会根据这个值变化,值越小存储在磁盘的图片文件越小,取值
         //区间为0-100,小于0时会抛异常
         int options = 100;
-        beforeBitmap.compress(Bitmap.CompressFormat.JPEG, options, bos);
+        rotatedBitmap.compress(Bitmap.CompressFormat.JPEG, options, bos);
         //循环压缩
         while (bos.toByteArray().length/1024 > tarSize)
         {
             bos.reset();
             if (options > 10) {
                 options -= 10;
-                beforeBitmap.compress(Bitmap.CompressFormat.JPEG, options, bos);
+                rotatedBitmap.compress(Bitmap.CompressFormat.JPEG, options, bos);
             } else {
                 options = 1;
-                beforeBitmap.compress(Bitmap.CompressFormat.JPEG,options, bos);
+                rotatedBitmap.compress(Bitmap.CompressFormat.JPEG,options, bos);
                 break;
             }
         }
@@ -302,6 +323,9 @@ public class ImageTool{
         fos.write(bos.toByteArray());
         fos.flush();
         fos.close();
+
+        bitmap.recycle();
+        rotatedBitmap.recycle();
         return file.getAbsolutePath();
     }
 
